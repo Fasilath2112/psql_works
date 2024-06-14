@@ -1,0 +1,183 @@
+1.
+create table employees(id serial primary key, name varchar(100) not null, department varchar(100) not null, branch varchar(100), salary int not null default 0 check (salary>= 10000 and salary<=99999));
+CREATE TABLE
+
+emp=# select * from employees;
+ id | name | department | branch | salary 
+----+------+------------+--------+--------
+
+2.
+insert into employees(name, department, branch, salary) values('Fasilath', 'development', 'NewYork','90000'), ('Haritha','HR','Los Angeles','70000'),('Sona S','development','New York','60000'),('Lena','marketing','Boston','10100'),('Laura','sales','Chicago','11000'),('Louis','development','New York','20000'), ('Aishwarya','testing','Chicago','50000'),('Reshma','devops','Los Angeles','50040'),('Christo','devops','Boston','70000'), ('Swarag','sales','Chicago','70000'), ('Sona P','HR','Los Angeles','70000'), ('Joprin','HR','Boston','70000');
+
+INSERT 0 12
+
+select * from employees order by id asc;
+ id |   name    | department  |   branch    | salary 
+----+-----------+-------------+-------------+--------
+  1 | Fasilath  | development | NewYork     |  90000
+  2 | Haritha   | HR          | Los Angeles |  70000
+  3 | Sona S    | development | New York    |  70000
+  4 | Lena      | marketing   | Boston      |  60000
+  5 | Laura     | sales       | Chicago     |  40000
+  6 | Louis     | development | New York    |  50000
+  7 | Aishwarya | testing     | Chicago     |  70000
+  8 | Reshma    | devops      | Los Angeles |  70000
+  9 | Christo   | devops      | Boston      |  70000
+ 10 | Swarag    | sales       | Chicago     |  70000
+ 11 | Sona P    | HR          | Los Angeles |  70000
+ 12 | Joprin    | HR          | Boston      |  70000
+(12 rows)
+
+3.
+emp=# alter table employees add email varchar(100);
+ALTER TABLE
+emp=# alter table employees add phone_number varchar(20);
+ALTER TABLE
+
+select * from employees;
+ id |   name    | department  |   branch    | salary | email | phone_number 
+----+-----------+-------------+-------------+--------+-------+--------------
+  1 | Fasilath  | development | NewYork     |  90000 |       | 
+  2 | Haritha   | HR          | Los Angeles |  70000 |       | 
+  9 | Christo   | devops      | Boston      |  70000 |       | 
+  3 | Sona S    | development | New York    |  70000 |       | 
+ 10 | Swarag    | sales       | Chicago     |  70000 |       | 
+ 11 | Sona P    | HR          | Los Angeles |  70000 |       | 
+ 12 | Joprin    | HR          | Boston      |  70000 |       | 
+  4 | Lena      | marketing   | Boston      |  10100 |       | 
+  5 | Laura     | sales       | Chicago     |  11000 |       | 
+  6 | Louis     | development | New York    |  20000 |       | 
+  7 | Aishwarya | testing     | Chicago     |  50000 |       | 
+  8 | Reshma    | devops      | Los Angeles |  50040 |       | 
+(12 rows)
+
+4.
+alter table employees alter column salary drop default;
+ALTER TABLE
+
+5.
+update employees set phone_number = '9382993283', email = 'xyz@123.com' where salary between 10100 and 50045 and department in ('marketing', 'testing');
+UPDATE 5
+
+emp=# select * from employees;
+ id |   name    | department  |   branch    | salary |    email    | phone_number 
+----+-----------+-------------+-------------+--------+-------------+--------------
+  1 | Fasilath  | development | NewYork     |  90000 |             | 
+  2 | Haritha   | HR          | Los Angeles |  70000 |             | 
+  9 | Christo   | devops      | Boston      |  70000 |             | 
+  3 | Sona S    | development | New York    |  70000 |             | 
+ 10 | Swarag    | sales       | Chicago     |  70000 |             | 
+ 11 | Sona P    | HR          | Los Angeles |  70000 |             | 
+ 12 | Joprin    | HR          | Boston      |  70000 |             | 
+  8 | Reshma    | marketing   | Los Angeles |  50040 | xyz@123.com | 9382993283
+  7 | Aishwarya | testing     | Chicago     |  50000 | xyz@123.com | 9382993283
+  6 | Louis     | marketing   | New York    |  20000 | xyz@123.com | 9382993283
+  5 | Laura     | testing     | Chicago     |  11000 | xyz@123.com | 9382993283
+  4 | Lena      | marketing   | Boston      |  10100 | xyz@123.com | 9382993283
+(12 rows)
+
+
+6.
+update employees set email='example12@gmail.com' where email is null;
+UPDATE 7
+
+7.
+alter table employees add constraint  unique_email unique (email);
+ALTER TABLE
+
+8.
+emp=# select * from employees;
+ id |   name    | department  |   branch    | salary |        email        | phone_number 
+----+-----------+-------------+-------------+--------+---------------------+--------------
+  8 | Reshma    | marketing   | Los Angeles |  50040 | xyz@123.com         | 9382993283
+  7 | Aishwarya | testing     | Chicago     |  50000 | xyz@123.com         | 9382993283
+  6 | Louis     | marketing   | New York    |  20000 | xyz@123.com         | 9382993283
+  5 | Laura     | testing     | Chicago     |  11000 | xyz@123.com         | 9382993283
+  4 | Lena      | marketing   | Boston      |  10100 | xyz@123.com         | 9382993283
+  1 | Fasilath  | development | NewYork     |  90000 | example12@gmail.com | 
+  3 | Sona S    | development | New York    |  70000 | example12@gmail.com | 
+  2 | Haritha   | HR          | Los Angeles |  70000 | example12@gmail.com | 
+  9 | Christo   | devops      | Boston      |  70000 | example12@gmail.com | 
+ 10 | Swarag    | sales       | Chicago     |  70000 | example12@gmail.com | 
+ 11 | Sona P    | HR          | Los Angeles |  70000 | example12@gmail.com | 
+ 12 | Joprin    | HR          | Boston      |  70000 | example12@gmail.com | 
+(12 rows)
+
+9.
+emp=# select id, name, email from employees where salary >= 45000 and lower(department) like '%market%' and branch in ('Being', 'Tokyo', 'New York');
+ id | name | email 
+----+------+-------
+(0 rows)
+emp=# select * from employees order by salary desc limit 5;
+ id |   name   | department  |   branch    | salary |        email        | phone_number 
+----+----------+-------------+-------------+--------+---------------------+--------------
+  1 | Fasilath | development | NewYork     |  90000 | example12@gmail.com | 
+  2 | Haritha  | HR          | Los Angeles |  70000 | example12@gmail.com | 
+  3 | Sona S   | development | New York    |  70000 | example12@gmail.com | 
+  9 | Christo  | devops      | Boston      |  70000 | example12@gmail.com | 
+ 10 | Swarag   | sales       | Chicago     |  70000 | example12@gmail.com | 
+(5 rows)
+
+10.
+emp=# select * from employees where phone_number is null;
+ id |   name   | department  |   branch    | salary |        email        | phone_number 
+----+----------+-------------+-------------+--------+---------------------+--------------
+  1 | Fasilath | development | NewYork     |  90000 | example12@gmail.com | 
+  3 | Sona S   | development | New York    |  70000 | example12@gmail.com | 
+  2 | Haritha  | HR          | Los Angeles |  70000 | example12@gmail.com | 
+  9 | Christo  | devops      | Boston      |  70000 | example12@gmail.com | 
+ 10 | Swarag   | sales       | Chicago     |  70000 | example12@gmail.com | 
+ 11 | Sona P   | HR          | Los Angeles |  70000 | example12@gmail.com | 
+ 12 | Joprin   | HR          | Boston      |  70000 | example12@gmail.com | 
+(7 rows)
+
+
+11.
+emp=# select department, count(*) as count from employees group by department having count(*) > 3 order by department asc;
+ department | count 
+------------+-------
+ sales      |     4
+(1 row)
+
+12.
+emp=# select department, max(salary) as max_salary, min(salary) as min_salary, avg(salary) as avg_salary from employees group by department;
+ department  | max_salary | min_salary |     avg_salary     
+-------------+------------+------------+--------------------
+ development |      70000 |      70000 | 70000.000000000000
+ HR          |      70000 |      70000 | 70000.000000000000
+ marketing   |      50040 |      10100 | 26713.333333333333
+ devops      |      70000 |      70000 | 70000.000000000000
+ sales       |      90000 |      70000 | 75000.000000000000
+ testing     |      50000 |      11000 | 30500.000000000000
+(6 rows)
+
+13.
+emp=# select distinct email from employees;
+        email        
+---------------------
+ example12@gmail.com
+ xyz@123.com
+(2 rows)
+
+14.
+emp=# select department, count(*) as count from employees where name like 'L%' group by department;
+ department | count 
+------------+-------
+ testing    |     1
+ marketing  |     2
+(2 rows)
+
+15.
+emp=# select branch, count(*) as total_employees, count(phone_number) as employees_with_phone_number from employees group by branch;                                                        
+   branch    | total_employees | employees_with_phone_number 
+-------------+-----------------+-----------------------------
+ NewYork     |               1 |                           0
+ Chicago     |               3 |                           2
+ New York    |               2 |                           1
+ Boston      |               3 |                           1
+ Los Angeles |               3 |                           1
+(5 rows)
+
+16.
+emp=# delete from employees where phone_number is null and branch = 'Tokyo';
+DELETE 1
