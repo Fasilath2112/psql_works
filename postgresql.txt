@@ -104,7 +104,7 @@ emp=# select * from employees;
 (12 rows)
 
 9.
-emp=# select id, name, email from employees where salary >= 45000 and lower(department) like '%market%' and branch in ('Being', 'Tokyo', 'New York');
+emp=# select id, name, email from employees where salary >= 45000 and department ilike '%market%' and branch in ('Being', 'Tokyo', 'New York');
  id | name | email 
 ----+------+-------
 (0 rows)
